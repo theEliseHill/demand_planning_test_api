@@ -3,6 +3,8 @@ from app.main import app
 
 client = TestClient(app)
 
+
+# This is the test
 def test_forecast_endpoint():
     response = client.post(
         "/forecast",

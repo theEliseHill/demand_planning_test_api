@@ -13,6 +13,7 @@ router = APIRouter()
 def get_repository():
     return SalesRepository()
 
+# This is called from the endpoint but then we do the same thing and call the repository
 def get_service(repo: SalesRepository = Depends(get_repository)):
     return ForecastService(repo)
 
@@ -20,9 +21,13 @@ def get_service(repo: SalesRepository = Depends(get_repository)):
 def health_check():
     return {"status": "ok :)"}
 
+# Gets called when I use the website (swagger ui)
+# Forecast request is the validation
+# Forecast servive gets the information for the calculation
 @router.post("/forecast")
 def forecast(request : ForecastRequest, 
              service : ForecastService = Depends(get_service)):
+    # So we have the repo from the above call, now we attempt to calculate the forecast
     try:
         result = service.moving_average(
             request.values,
